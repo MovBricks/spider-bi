@@ -4,6 +4,7 @@
   "description": "",
   "main": "src/main.js",
   "dependencies": {
+    "axios": "^0.18.0",
     "puppeteer": "^1.2.0"
   },
   "devDependencies": {},
