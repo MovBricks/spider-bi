@@ -18,20 +18,20 @@ async function getSpiderUrl() {
 
 const mkdirHandler = (path) => {
     return new Promise((resolve, reject) => {
-    fs.access(path, (err) => {
-        if(err) {
-            fs.mkdir(path, (err)=> {
-                if(err){
-                    reject(err);
-                } else {
-                    resolve();
-                }
-            });
-        } else {
-            resolve();
-        }
+        fs.access(path, (err) => {
+            if(err) {
+                fs.mkdir(path, (err)=> {
+                    if(err){
+                        reject(err);
+                    } else {
+                        resolve();
+                    }
+                });
+            } else {
+                resolve();
+            }
+        })
     })
-})
 }
 
 async function writeToDisk(fileName, data) {
