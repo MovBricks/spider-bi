@@ -1,8 +1,9 @@
 const fs = require('fs');
 const puppeteer = require('puppeteer');
 const axios = require('axios');
-const mainUrl = 'https://h.bilibili.com/p'
+// const mainUrl = 'https://h.bilibili.com/p'
 
+// 启动
 async function getSpiderUrl() {
     
     const browser = await puppeteer.launch({
@@ -12,7 +13,7 @@ async function getSpiderUrl() {
     });
     const page = await browser.newPage();
 
-    const spiderUrl = 'https://h.bilibili.com/1215747'
+    const spiderUrl = 'https://h.bilibili.com/1160549'
     downloadImgsByUrl(spiderUrl, browser, page);
 }
 
@@ -40,7 +41,7 @@ async function writeToDisk(fileName, data) {
         data.pipe(wStream);
         data.on('end', () => {
             resolve();
-            console.log(`结束`)
+            console.log(`${fileName} 下载结束`)
         })
     });
 }
@@ -56,6 +57,7 @@ async function runAsTasks(tasks, sec = 1) {
     }
 }
 
+// 下载图片
 async function downloadImgs(result) {
 
     const imgURL = result.imgUrlList;
@@ -79,21 +81,24 @@ async function downloadImgs(result) {
         const res = await axios.get(e, {   
             responseType: 'stream'
         })
-
+        // 写入硬盘
         await writeToDisk(`${path}/${i}${fileExtension}`, res.data);
     }
 
+    // 创建任务队列
     const tasks = imgURL.map((e, i) => {
         return async () => {
             getWriteResource(e, i)
         }
     });
 
+    // 串行运行
     await runAsTasks(tasks)
     
     console.log(`${title} OK!`);
 }
 
+// 爬取地址
 async function downloadImgsByUrl(url, browser, page) {
 
     const selector = {
